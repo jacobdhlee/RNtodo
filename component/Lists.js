@@ -75,7 +75,6 @@ class Lists extends Component {
     // destructure state and gestureState
     const { dx } = gestureState;
     const { previousLeft, previousRight, left, right, open, menuPosition } = this.state
-    console.log('dx is ', dx, '  menu', menuPosition.left, ' previousLeft ', previousLeft, ' open ', open)
 
     // setting left button Open
     let movingLeft = previousLeft + dx
@@ -89,39 +88,7 @@ class Lists extends Component {
     if ( open && dx < -10 ) {
       this.onHandleUpdate(0) 
       this.setState({open: false})
-      console.log(this.state)
     } 
-
-
-    
-    // let openingLeft = gestureState.dx > 10
-    // if((openingLeft && this.state.open) || (!openingLeft && !this.state.open)) {
-    //   return;
-    // 
-
-    // let left = this.state.previousLeft + gestureState.dx
-    // let menuPosition = {
-    //   left: left,
-    //   right: this.state.previousRight,
-    // }
-
-    // this.setState({
-    //   previousLeft: left,
-    //   menuPosition,
-    // })
-
-    // if(Math.abs(gestureState.dx) > minOpenWidth) {
-    //   let open = !this.state.open
-    //   this.setState({open})
-    //   if(open) {
-    //     this.setState({
-    //       menuPosition: {
-    //         left: slideMenuWidth,
-    //         right: 0,
-    //       }
-    //     })
-    //   }
-    // }
   }
 
   handleEnd(e, gestureState) {

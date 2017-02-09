@@ -227,6 +227,7 @@ class App extends Component {
             renderRow={(key, ...value) => {
               return(
                 <Lists
+                  refs={"menu"}
                   thingsTodo={key} 
                   edit={(edit) => this.handleEditItems(key, edit)}
                   delete={() => this.handleDeleteItems(key)}
@@ -235,11 +236,6 @@ class App extends Component {
                   complete={(complete)=> this.completeButton(key, complete)}
                   {...value}
                 />
-              )
-            }}
-            renderSeparator={ (sectionID, rowID) => {
-              return (
-                <View key={rowID} style={styles.separate} />
               )
             }}
           />
@@ -293,3 +289,8 @@ const styles = StyleSheet.create({
 
 export default App
 
+//  renderSeparator={ (sectionID, rowID) => {
+//               return (
+//                 <View key={rowID} style={styles.separate} />
+//               )
+//             }}

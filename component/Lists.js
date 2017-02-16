@@ -67,15 +67,21 @@ class Lists extends Component {
 
   handleMove(e, gestureState) {
     const { open, position } = this.state;
-    console.log('dx is ', Math.abs(gestureState.dx))
+    console.log('dx is ', Math.abs(gestureState.dx), ' open ', this.state.open )
 
     this.right = Math.abs(gestureState.dx)
     if(this.right > minOpenRight) {
       this.right = slideRightMenuWidth;
       this.onHandleUpdate(this.right, true)
-    } else {
+    } 
+    else if( this.state.open ) {
+      this.right = 0
+      this.onHandleUpdate(this.right, false);
+    } 
+    else {
       this.onHandleUpdate(this.right, false)
     }
+
   }
 
   handleEnd(e, gestureState) {

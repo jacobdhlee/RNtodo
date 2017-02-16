@@ -36,6 +36,7 @@ class Lists extends Component {
     this.handleEnd = this.handleEnd.bind(this);
     this.onHandleUpdate = this.onHandleUpdate.bind(this);
     this.handleEditPress = this.handleEditPress.bind(this);
+    this.handleDeletePress = this.handleDeletePress.bind(this);
   }
 
   componentWillMount() {
@@ -104,6 +105,11 @@ class Lists extends Component {
     this.onHandleUpdate(0, false);
   }
 
+  handleDeletePress() {
+    this.props.delete();
+    this.onHandleUpdate(0, false);
+  }
+
   render() {
     const { thingsTodo, refs } = this.props
 
@@ -124,7 +130,7 @@ class Lists extends Component {
                 <Text style={styles.buttonText}>Edit</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.delete} onPress={() => this.props.delete()}>
+              <TouchableOpacity style={styles.delete} onPress={this.handleDeletePress}>
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
             </View>

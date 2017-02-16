@@ -164,7 +164,6 @@ class App extends Component {
     const { items, dataSource } = this.state
     const newItems = items.map((item) => {
       if(item.key === keys) {
-         console.log('fuck !!!')
          return {
           ...item,
           todo: value,

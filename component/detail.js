@@ -110,12 +110,14 @@ const styles = StyleSheet.create({
   changeTodo: {
     flex: 1,
     justifyContent: 'center',
+    borderBottomColor: '#000000',
+    borderBottomWidth: 1 
   },
   addNoteStyle: {
     flex: 4,
     padding: 10,
     overflow: 'hidden',
-    borderWidth: 1,
+    marginHorizontal: 15,
   },
   button: {
     flex: 1,
@@ -138,6 +140,8 @@ const styles = StyleSheet.create({
     flex: 3,
     padding: 10,
     fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#3b5998',
   },
   notification:{
     flex: 1,
@@ -147,6 +151,9 @@ const styles = StyleSheet.create({
   },
   buttonBox: {
     flex: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#3b5998',
     marginHorizontal: 30,
     marginVertical: 15,
     justifyContent: 'center',
@@ -155,6 +162,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 17,
     fontWeight: '600',
+    color: '#3b5998'
   }
 })
 

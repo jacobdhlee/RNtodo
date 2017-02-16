@@ -40,7 +40,6 @@ class Lists extends Component {
   }
 
   componentWillMount() {
-    console.log('minimum ',minOpenRight)
     this.slideAnimation.setValue(0);
     Animated.timing(this.slideAnimation, {
       toValue: 1,
@@ -69,7 +68,6 @@ class Lists extends Component {
 
   handleMove(e, gestureState) {
     const { open, position } = this.state;
-    console.log('dx is ', Math.abs(gestureState.dx), ' open ', this.state.open )
 
     this.right = Math.abs(gestureState.dx)
     if(this.right > minOpenRight) {
@@ -87,7 +85,6 @@ class Lists extends Component {
   }
 
   handleEnd(e, gestureState) {
-    console.log('this shoule work')
     if(!this.state.open) {
       const position = { right: 0 };
       const open = false;
@@ -95,7 +92,6 @@ class Lists extends Component {
         position,
         open
       })
-      console.log('right is ', this.right);
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
   }

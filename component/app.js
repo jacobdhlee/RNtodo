@@ -101,12 +101,12 @@ class App extends Component {
         }
       }
       return todo
-    })
+    });
 
     this.setState({
       items: newItems,
       dataSource: dataSource.cloneWithRows(newItems)
-    })
+    });
   }
 
   starButtonPress(key, important) {
@@ -120,19 +120,19 @@ class App extends Component {
         }
       }
       return todo
-    })
+    });
 
     newItems.sort((item) => {
       if(item.important && !item.complete) {
         return -1
       }
-    })
+    });
 
     this.setState({
       items: newItems,
       dataSource: dataSource.cloneWithRows(newItems),
       star: important
-    })
+    });
   }
 
   completeButton(key, complete) {
@@ -146,19 +146,19 @@ class App extends Component {
         }
       }
       return todo
-    })
+    });
 
     newItems.sort((item) => {
       if(!item.complete) {
         return -1
       }
-    })
+    });
 
     this.setState({
       items: newItems,
       dataSource: dataSource.cloneWithRows(newItems),
       complete,
-    })
+    });
   }
 
   modalonChangeText(keys, value, note, edit) {
@@ -173,13 +173,13 @@ class App extends Component {
           hidden: true,
         }
       }
-      return item
-    })
+      return item;
+    });
     this.setState({
       items: newItems,
       dataSource: dataSource.cloneWithRows(newItems),
       edit,
-    })
+    });
   }
 
 
@@ -199,27 +199,10 @@ class App extends Component {
           onChangeText={(keys, value, note, edit) => this.modalonChangeText(keys, value, note, edit)}
         />
       </Modal>
-    )
+    );
 
-    return (
-      <View style={styles.container}>
-
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Weekly To Do</Text>
-        </View>
-
-        <View style={styles.weekBar}>
-          <Text style={styles.weekBarText}>{weekOfYear}</Text>
-        </View>
-
-        <AddTodo 
-          value={this.state.value}
-          onChangeText={(value) => this.setState({ value })}
-          addList={this.addList}
-        />
-
-        <View style={styles.body}>
-          <ListView 
+    const listView = (
+      <ListView 
             style={styles.list}
             dataSource={this.state.dataSource}
             enableEmptySections
@@ -239,10 +222,35 @@ class App extends Component {
               )
             }}
           />
+    );
+
+    const noList = (
+      <Text style={{ fontSize: 16, fontWeight: '600'}}>Nothing to do for now</Text>
+    );
+
+    return (
+      <View style={styles.container}>
+
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Weekly To Do</Text>
         </View>
-        { modalContent }
+
+        <View style={styles.weekBar}>
+          <Text style={styles.weekBarText}>{weekOfYear}</Text>
         </View>
-    )
+
+        <AddTodo 
+          value={this.state.value}
+          onChangeText={(value) => this.setState({ value })}
+          addList={this.addList}
+        />
+
+        <View style={styles.body}>
+          {this.state.items.length > 0 ? listView : noList}
+        </View>
+          { modalContent }
+        </View>
+    );
   }
 }
 
@@ -250,32 +258,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     ...Platform.select({
-      ios: { paddingTop: 20 }
-    })
+      ios: { paddingTop: 20 },
+    }),
   },
   header: {
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
   },
   headerText: {
     fontSize: 20,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   weekBar: {
     justifyContent: 'center',
     paddingHorizontal: 10,
     backgroundColor: '#5e727c',
     alignItems:'center',
-    height: 25
+    height: 25,
   },
   weekBarText: {
     color: 'white',
   },
   body: {
     flex: 1,
-    backgroundColor:'#f5f5f5'
+    backgroundColor:'#f5f5f5',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   list: {
     backgroundColor: '#f4f8ff',
@@ -283,14 +293,7 @@ const styles = StyleSheet.create({
   separate: {
     borderWidth: 0.5,
     borderColor: '#717272'
-  }
-  
-})
+  },
+});
 
-export default App
-
-//  renderSeparator={ (sectionID, rowID) => {
-//               return (
-//                 <View key={rowID} style={styles.separate} />
-//               )
-//             }}
+export default App;

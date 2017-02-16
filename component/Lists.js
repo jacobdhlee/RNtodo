@@ -10,7 +10,7 @@ import {
   Modal,
   LayoutAnimation,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from '@exponent/vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
 
@@ -130,7 +130,19 @@ class Lists extends Component {
             </View>
           </View>
           <View style={[styles.container, this.state.position, { backgroundColor: 'white' }]} {...this.panResponder.panHandlers}>
-            <Text style={[styles.text, thingsTodo.complete && styles.completeText]}>{thingsTodo.todo}</Text>
+            
+            <TouchableOpacity style={styles.completeButton} onPress={() => this.props.complete()}>
+              <Icon name="check" size={20} color={completeColor}/>
+            </TouchableOpacity>
+
+            <View style={{flex: 8, justifyContent: 'center', alignItems:'center'}}>
+              <Text style={[styles.text, thingsTodo.complete && styles.completeText]}>{thingsTodo.todo}</Text>
+            </View>
+
+            <TouchableOpacity style={styles.starButton} onPress={() => this.props.important()}>
+              <Icon name="star" size={20} color={starColor}/>
+            </TouchableOpacity>
+
           </View>
 
         </Animated.View>
@@ -215,11 +227,3 @@ const styles = StyleSheet.create({
 })
 
 export default Lists;
-
-// <TouchableOpacity style={styles.starButton} onPress={() => this.props.important()}>
-//               <Icon name="star" size={20} color={starColor}/>
-//             </TouchableOpacity>
-
-// <TouchableOpacity style={styles.completeButton} onPress={() => this.props.complete()}>
-//               <Icon name="check" size={20} color={completeColor}/>
-//             </TouchableOpacity>

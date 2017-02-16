@@ -23,16 +23,14 @@ class Lists extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      previousLeft: 0,
-      previousRight: 0,
-      menuPosition: {
-        left: this.previousLeft,
-        right: this.previousRight,
-      },
       open: false,
+      openRight : false,
     }
 
-    this.slideAnimation = new Animated.Value(0)
+    this.prevLeft = 0;
+    this.prevRight = 0;
+
+    this.slideAnimation = new Animated.Value(0);
     this.handleStart = this.handleStart.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
@@ -40,77 +38,46 @@ class Lists extends Component {
   }
 
   componentWillMount() {
-    // Animations when add todo list slide left to right
     this.slideAnimation.setValue(0);
     Animated.timing(this.slideAnimation, {
       toValue: 1,
       duration: 500,
     }).start()
-    // create panrespond for side menu
+
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this.handleStart,
       onMoveShouldSetPanResponder: this.handleStart,
       onPanResponderMove: this.handleMove,
-      onPanResponderRelease: this.handleEnd
+      onPanResponderRelease: this.handleEnd,
     })
   }
 
-  onHandleUpdate(left, open) {
-    let isOpen = open || this.state.open
-    let menuPosition = {
-      left: left,
-    }
-    this.setState({ 
-      menuPosition,
-      open: isOpen, 
-    })
+  onHandleUpdate(left , right, open, openRight) {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   handleStart(e, gestureState) {
-    return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 10 
+    const { dx, dy } = gestureState;
+    return Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10 
   }
 
   handleMove(e, gestureState) {
-    // destructure state and gestureState
     const { dx } = gestureState;
-    const { previousLeft, previousRight, left, right, open, menuPosition } = this.state
+    const { open, openRight } = this.state;
+    console.log('dx is ? ', dx);
+    
 
-    // setting left button Open
-    let movingLeft = previousLeft + dx
-    movingLeft > slideMenuWidth ? (movingLeft = slideMenuWidth) : movingLeft
-    this.onHandleUpdate(movingLeft)
 
-    if(dx > minOpenWidth) {
-      this.onHandleUpdate(slideMenuWidth, true)
-    }
-
-    if ( open && dx < -10 ) {
-      this.onHandleUpdate(0) 
-      this.setState({open: false})
-    } 
   }
 
   handleEnd(e, gestureState) {
     const { dx } = gestureState
-    if(!this.state.open) {
-      this.setState({
-        menuPosition: {
-          left: 0,
-          right: 0,
-        }
-      })
-    } else {
-      let previousLeft = this.state.previousLeft + dx
-      this.setState({ previousLeft })
-    }
-
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    const { menuPosition ,open, menuRight, openRight } = this.state
   }
 
   render() {
-    const { thingsTodo, refs } = this.props
-
+    const { thingsTodo } = this.props
+    const { menuPosition } = this.state
     const starColor = thingsTodo.important ? "#f2d518" : '#1acc5e';
     const completeColor = thingsTodo.complete ? "#1acc5e" : 'lightgrey';
 
@@ -118,10 +85,6 @@ class Lists extends Component {
       inputRange: [0, 1],
       outputRange: [-1000, 0]
     })
-
-    const slideMenu = {
-      left: this.state.previousLeft,
-    }
 
     return (
       <View>
@@ -136,7 +99,7 @@ class Lists extends Component {
             </View>
           </View> 
 
-          <View style={[styles.container, this.state.menuPosition, { backgroundColor: 'white' }]} {...this.panResponder.panHandlers}>
+          <View style={[styles.container, menuPosition, { backgroundColor: 'white' }]} {...this.panResponder.panHandlers}>
             <Text style={[styles.text, thingsTodo.complete && styles.completeText]}>{thingsTodo.todo}</Text>
           </View>
 

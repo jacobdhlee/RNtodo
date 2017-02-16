@@ -75,7 +75,7 @@ class Lists extends Component {
       this.right = slideRightMenuWidth;
       this.onHandleUpdate(this.right, true)
     } 
-    else if( this.state.open ) {
+    else if( this.state.open && gestureState.dx > 5 ) {
       this.right = 0
       this.onHandleUpdate(this.right, false);
     } 
@@ -169,7 +169,8 @@ const styles = StyleSheet.create({
   sideRightMenu: {
     flexDirection: 'row',
     width: slideRightMenuWidth,
-    height: 50,
+    height: 49,
+    
   },
 
   sideMenu: {

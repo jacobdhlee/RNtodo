@@ -52,7 +52,7 @@ class App extends Component {
         important: false,
         edit: false,
         note: ''
-      }
+      },
     ]
     this.setState({
       items: newTodo,
@@ -122,11 +122,11 @@ class App extends Component {
       return todo
     });
 
-    newItems.sort((item) => {
-      if(item.important && !item.complete) {
-        return -1
+    newItems.sort((item1, item2) => {
+      if(!item1.complete && !item2.complete){
+        return item2.important - item1.important;
       }
-    });
+    })
 
     this.setState({
       items: newItems,
@@ -138,6 +138,7 @@ class App extends Component {
   completeButton(key, complete) {
     complete = !this.state.complete
     const { items, dataSource } = this.state
+    let completeTodo;
     const newItems = items.map((todo) => {
       if(todo.key === key.key) {
          return {
@@ -148,11 +149,9 @@ class App extends Component {
       return todo
     });
 
-    newItems.sort((item) => {
-      if(!item.complete) {
-        return -1
-      }
-    });
+    newItems.sort((item1, item2) => {   
+      return item1.complete - item2.complete;      
+    })
 
     this.setState({
       items: newItems,

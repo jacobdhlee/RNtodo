@@ -1,8 +1,8 @@
 {
-  "exponentServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 63129,
+  "exponentServerPort": 19002,
   "exponentServerNgrokUrl": "https://jx-uf8.jacobdhlee.todo.exp.direct",
   "packagerNgrokUrl": "https://packager.jx-uf8.jacobdhlee.todo.exp.direct",
-  "ngrokPid": 63149
+  "ngrokPid": 69036,
+  "packagerPort": 19003,
+  "packagerPid": 69021
 }

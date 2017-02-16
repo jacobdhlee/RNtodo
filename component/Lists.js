@@ -35,6 +35,7 @@ class Lists extends Component {
     this.handleMove = this.handleMove.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
     this.onHandleUpdate = this.onHandleUpdate.bind(this);
+    this.handleEditPress = this.handleEditPress.bind(this);
   }
 
   componentWillMount() {
@@ -98,6 +99,11 @@ class Lists extends Component {
     }
   }
 
+  handleEditPress() {
+    this.props.edit()
+    this.onHandleUpdate(0, false);
+  }
+
   render() {
     const { thingsTodo, refs } = this.props
 
@@ -114,7 +120,7 @@ class Lists extends Component {
         <Animated.View style={{ left: slideTodo }} > 
           <View style={[styles.container, styles.sideMenu]}>
             <View style={styles.sideRightMenu}>
-              <TouchableOpacity style={styles.edit} onPress={() =>  this.props.edit()}>
+              <TouchableOpacity style={styles.edit} onPress={this.handleEditPress}>
                 <Text style={styles.buttonText}>Edit</Text>
               </TouchableOpacity>
 

@@ -14,23 +14,23 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
 
-let slideMenuWidth = width * 0.2;
-let minOpenWidth = width * 0.1;
+// let slideMenuWidth = width * 0.2;
+// let minOpenWidth = width * 0.1;
 let slideRightMenuWidth = width * 0.4;
-let minOpenRightWIdth = width * 0.2;
+let minOpenRight = width * 0.2;
 
 class Lists extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      position: {
+        right: 0,
+      },
       open: false,
-      openRight : false,
-    }
+    };
+    this.right = 0;
 
-    this.prevLeft = 0;
-    this.prevRight = 0;
-
-    this.slideAnimation = new Animated.Value(0);
+    this.slideAnimation = new Animated.Value(0)
     this.handleStart = this.handleStart.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
@@ -38,46 +38,63 @@ class Lists extends Component {
   }
 
   componentWillMount() {
+    console.log('minimum ',minOpenRight)
     this.slideAnimation.setValue(0);
     Animated.timing(this.slideAnimation, {
       toValue: 1,
       duration: 500,
-    }).start()
+    }).start();
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this.handleStart,
       onMoveShouldSetPanResponder: this.handleStart,
       onPanResponderMove: this.handleMove,
-      onPanResponderRelease: this.handleEnd,
-    })
+      onPanResponderRelease: this.handleEnd
+    });
   }
 
-  onHandleUpdate(left , right, open, openRight) {
+  onHandleUpdate(right, open) {
+    let position = { right };
+    this.right = right;
+    this.setState({ position, open });
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   handleStart(e, gestureState) {
     const { dx, dy } = gestureState;
-    return Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10 
+    return Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10;
   }
 
   handleMove(e, gestureState) {
-    const { dx } = gestureState;
-    const { open, openRight } = this.state;
-    console.log('dx is ? ', dx);
-    
+    const { open, position } = this.state;
+    console.log('dx is ', Math.abs(gestureState.dx))
 
-
+    this.right = Math.abs(gestureState.dx)
+    if(this.right > minOpenRight) {
+      this.right = slideRightMenuWidth;
+      this.onHandleUpdate(this.right, true)
+    } else {
+      this.onHandleUpdate(this.right, false)
+    }
   }
 
   handleEnd(e, gestureState) {
-    const { dx } = gestureState
-    const { menuPosition ,open, menuRight, openRight } = this.state
+    console.log('this shoule work')
+    if(!this.state.open) {
+      const position = { right: 0 };
+      const open = false;
+      this.setState({
+        position,
+        open
+      })
+      console.log('right is ', this.right);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
   }
 
   render() {
-    const { thingsTodo } = this.props
-    const { menuPosition } = this.state
+    const { thingsTodo, refs } = this.props
+
     const starColor = thingsTodo.important ? "#f2d518" : '#1acc5e';
     const completeColor = thingsTodo.complete ? "#1acc5e" : 'lightgrey';
 
@@ -90,16 +107,17 @@ class Lists extends Component {
       <View>
         <Animated.View style={{ left: slideTodo }} > 
           <View style={[styles.container, styles.sideMenu]}>
-            <View style={styles.sideLeftMenu}>
-              <Text>Hi</Text>
-            </View>
-
             <View style={styles.sideRightMenu}>
-              <Text>Hi Right</Text>
-            </View>
-          </View> 
+              <TouchableOpacity style={styles.edit} onPress={() =>  this.props.edit()}>
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
 
-          <View style={[styles.container, menuPosition, { backgroundColor: 'white' }]} {...this.panResponder.panHandlers}>
+              <TouchableOpacity style={styles.delete} onPress={() => this.props.delete()}>
+                <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={[styles.container, this.state.position, { backgroundColor: 'white' }]} {...this.panResponder.panHandlers}>
             <Text style={[styles.text, thingsTodo.complete && styles.completeText]}>{thingsTodo.todo}</Text>
           </View>
 
@@ -113,7 +131,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: 50,
-    width: width,
+    width,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -124,21 +143,14 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
   sideRightMenu: {
+    flexDirection: 'row',
     width: slideRightMenuWidth,
-    alignItems: 'center'
-  },
-
-  sideLeftMenu: {
-    width: slideMenuWidth,
-    alignItems: 'center'
+    height: 50,
   },
 
   sideMenu: {
     position: 'absolute',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'lightgrey',
-
+    justifyContent: 'flex-end',
   },
   
   starButton: {
@@ -168,21 +180,16 @@ const styles = StyleSheet.create({
   },
 
   edit: {
-    width: width * 0.3,
+    width: width * 0.2,
     backgroundColor: 'lightgrey',
     justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    margin: 5,
-    
+    alignItems: 'center',    
   },
   delete: {
-    width: width * 0.3,
+    width: width * 0.2,
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
-    margin: 5
   },
   buttonText:{
     fontSize: 15,
@@ -196,15 +203,6 @@ const styles = StyleSheet.create({
 })
 
 export default Lists;
-
-// <TouchableOpacity style={styles.edit} onPress={() =>  this.props.edit()}>
-//               <Text style={styles.buttonText}>Edit</Text>
-//             </TouchableOpacity>
-
-//             <TouchableOpacity style={styles.delete} onPress={() => this.props.delete()}>
-//               <Text style={styles.buttonText}>Delete</Text>
-//             </TouchableOpacity>
-
 
 // <TouchableOpacity style={styles.starButton} onPress={() => this.props.important()}>
 //               <Icon name="star" size={20} color={starColor}/>

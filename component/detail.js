@@ -68,6 +68,7 @@ class Detail extends Component {
                 value={this.state.note}
                 returnKeyType="next"
                 blurOnSubmit={false}
+                onSubmitEditing={Keyboard.dismiss}
                 onChangeText={(text) => this.handleNoteChange(text) }
                 style={styles.noteInput}
               />

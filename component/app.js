@@ -8,6 +8,7 @@ import {
   Keyboard,
   Modal,
   Dimensions,
+  AsyncStorage,
 } from 'react-native';
 import Moment from 'moment';
 import AddTodo from './addTodo';
@@ -38,6 +39,21 @@ class App extends Component {
     this.modalonChangeText = this.modalonChangeText.bind(this);
   }
 
+  componentWillMount() {
+    AsyncStorage.getItem("items").then((json) => {
+      try {
+        const items = JSON.parse(json);
+        this.setState({
+          items,
+          dataSource: this.state.dataSource.cloneWithRows(items)
+        })
+        AsyncStorage.setItem("items", JSON.stringify(items));
+      } catch(e) {
+        console.error('error is ', e)
+      }
+    })
+  }
+
   addList() {
     if(!this.state.value) {
       return;
@@ -59,6 +75,7 @@ class App extends Component {
       dataSource: this.state.dataSource.cloneWithRows(newTodo),
       value: '',
     })
+    AsyncStorage.setItem("items", JSON.stringify(newTodo));
   }
 
   handleEditItems(key, edit) {
@@ -78,6 +95,7 @@ class App extends Component {
        edit: !this.state.edit,
        modalKey: key
      })
+     AsyncStorage.setItem("items", JSON.stringify(newItems));
   }
 
   handleDeleteItems(key) {
@@ -88,7 +106,9 @@ class App extends Component {
       items: newTodo,
       dataSource: this.state.dataSource.cloneWithRows(newTodo),
     })
+    AsyncStorage.setItem("items", JSON.stringify(newTodo));
     this.handleHidden
+
   }
 
   handleHidden(key, hidden) {
@@ -133,6 +153,7 @@ class App extends Component {
       dataSource: dataSource.cloneWithRows(newItems),
       star: important
     });
+    AsyncStorage.setItem("items", JSON.stringify(newItems));
   }
 
   completeButton(key, complete) {
@@ -158,6 +179,7 @@ class App extends Component {
       dataSource: dataSource.cloneWithRows(newItems),
       complete,
     });
+    AsyncStorage.setItem("items", JSON.stringify(newItems));
   }
 
   modalonChangeText(keys, value, note, edit) {
@@ -178,6 +200,7 @@ class App extends Component {
       dataSource: dataSource.cloneWithRows(newItems),
       edit,
     });
+    AsyncStorage.setItem("items", JSON.stringify(newItems));
   }
 
 

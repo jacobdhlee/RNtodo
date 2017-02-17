@@ -1,5 +1,3 @@
-// note return key type 
-// fix swipe back
 import React, { Component } from 'react';
 import {
   View,
@@ -63,7 +61,7 @@ class Lists extends Component {
 
   handleStart(e, gestureState) {
     const { dx, dy } = gestureState;
-    return Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10;
+    return Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 5;
   }
 
   handleMove(e, gestureState) {
@@ -71,17 +69,14 @@ class Lists extends Component {
 
     this.right = Math.abs(gestureState.dx);
 
-    if(this.right > minOpenRight) {
+    if( this.state.open && Math.abs(gestureState.dx) > 1 ) {
+      this.right = 0
+      this.onHandleUpdate(this.right, false);
+    } else if(this.right > minOpenRight) {
       this.right = slideRightMenuWidth;
       this.onHandleUpdate(this.right, true)
       this.right = 0;
-    } 
-
-    else if( this.state.open && Math.abs(gestureState.dx) > 1 ) {
-      this.right = 0
-      this.onHandleUpdate(this.right, false);
-    } 
-    else {
+    } else {
       this.onHandleUpdate(this.right, false)
     }
 

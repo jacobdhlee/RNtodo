@@ -37,10 +37,15 @@ class App extends Component {
     this.completeButton = this.completeButton.bind(this);
     this.handleEditItems = this.handleEditItems.bind(this);
     this.modalonChangeText = this.modalonChangeText.bind(this);
+    this.storage = this.storage.bind(this);
   }
 
   componentWillMount() {
-    AsyncStorage.getItem("items").then((json) => {
+    this.storage();
+  }
+
+  async storage() {
+    await AsyncStorage.getItem("items").then((json) => {
       try {
         const items = JSON.parse(json);
         this.setState({

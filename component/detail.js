@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   Dimensions,
+  Keyboard,
   TouchableOpacity,
 } from 'react-native';
 
@@ -38,7 +39,15 @@ class Detail extends Component {
       <View style={styles.container}>
         <View style={styles.modalBox}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Details</Text>
+            <View style={styles.headerBox}/>
+            <View style={styles.headerBox}>
+              <Text style={styles.headerText}>Details</Text>
+            </View>
+            <TouchableOpacity 
+              style={[styles.headerBox, styles.doneButton]} 
+              onPress={(keys, value, note, edit) => this.props.onChangeText(this.state.key, this.state.value, this.state.note, false)}>
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.body}>
@@ -55,9 +64,10 @@ class Detail extends Component {
                 <Text style={styles.noteText}>Note :</Text>
               </View>
               <TextInput 
-                multiline
                 autoFocus
                 value={this.state.note}
+                returnKeyType="next"
+                blurOnSubmit={false}
                 onChangeText={(text) => this.handleNoteChange(text) }
                 style={styles.noteInput}
               />
@@ -91,9 +101,21 @@ const styles = StyleSheet.create({
   },
   header: {
     height: height * 0.07,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+  },
+  headerBox: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 1,
+  },
+  doneButton: {
+    alignItems: 'flex-end',
+    paddingRight: 10,
+  },
+  doneButtonText: {
+    fontSize: 15,
+    fontWeight: '600'
   },
   headerText: {
     fontSize: 17,

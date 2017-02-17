@@ -1,3 +1,5 @@
+// note return key type 
+// fix swipe back
 import React, { Component } from 'react';
 import {
   View,
@@ -14,8 +16,6 @@ import Icon from '@exponent/vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
 
-// let slideMenuWidth = width * 0.2;
-// let minOpenWidth = width * 0.1;
 let slideRightMenuWidth = width * 0.4;
 let minOpenRight = width * 0.2;
 
@@ -69,12 +69,15 @@ class Lists extends Component {
   handleMove(e, gestureState) {
     const { open, position } = this.state;
 
-    this.right = Math.abs(gestureState.dx)
+    this.right = Math.abs(gestureState.dx);
+
     if(this.right > minOpenRight) {
       this.right = slideRightMenuWidth;
       this.onHandleUpdate(this.right, true)
+      this.right = 0;
     } 
-    else if( this.state.open && gestureState.dx > 5 ) {
+
+    else if( this.state.open && Math.abs(gestureState.dx) > 1 ) {
       this.right = 0
       this.onHandleUpdate(this.right, false);
     } 
@@ -93,7 +96,7 @@ class Lists extends Component {
         open
       })
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    }
+    } 
   }
 
   handleEditPress() {
